@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 
 type ItemProps = {
   title: string;
-  text: string;
+  text: string | number;
 };
 
 export const Item = ({ title, text }: ItemProps) => {
