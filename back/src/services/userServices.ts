@@ -1,13 +1,29 @@
 import userRepository from "../repositories/userRepository.js";
-import { CreateUserData } from "../types/user.js";
+import { CreateUserData, UpdateUserData } from "../types/user.js";
 
 
 async function insert(Data: CreateUserData) {
 
-    await userRepository.insert(Data);
+    return await userRepository.insert(Data);
+
+}
+
+async function findById(id: number) {
+
+    const user = await userRepository.findById(id);
+    if(!user) throw { type: "not_found"};
+    return user;
+
+}
+
+async function update(Data: UpdateUserData) {
+
+    await userRepository.update(Data);
 
 }
 
 export default {
     insert,
+    findById,
+    update
 }

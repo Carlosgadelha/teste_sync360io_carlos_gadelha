@@ -47,6 +47,57 @@ function insert(user) {
         });
     });
 }
+function findById(id) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, prisma.user.findUnique({
+                        where: {
+                            id: id
+                        },
+                        select: {
+                            id: true,
+                            name: true,
+                            age: true,
+                            biography: true,
+                            address: {
+                                select: {
+                                    id: true,
+                                    zip_code: true,
+                                    stree_address: true,
+                                    number: true,
+                                    district: true,
+                                    city: true,
+                                    state: true,
+                                    complement: true
+                                }
+                            }
+                        }
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+function update(user) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, prisma.user.update({
+                        where: {
+                            id: user.id
+                        },
+                        data: user
+                    })];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
 export default {
     insert: insert,
+    update: update,
+    findById: findById
 };

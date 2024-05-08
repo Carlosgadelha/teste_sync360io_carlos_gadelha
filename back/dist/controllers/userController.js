@@ -39,8 +39,40 @@ export function createUser(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var response;
         return __generator(this, function (_a) {
-            response = userServices.insert(req.body);
-            return [2 /*return*/, res.send(response)];
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, userServices.insert(req.body)];
+                case 1:
+                    response = _a.sent();
+                    return [2 /*return*/, res.send(response)];
+            }
+        });
+    });
+}
+export function getUserById(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = parseInt(req.params.id);
+                    return [4 /*yield*/, userServices.findById(id)];
+                case 1:
+                    response = _a.sent();
+                    return [2 /*return*/, res.send(response)];
+            }
+        });
+    });
+}
+export function updateUser(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, userServices.update(req.body)];
+                case 1:
+                    response = _a.sent();
+                    return [2 /*return*/, res.send(response)];
+            }
         });
     });
 }

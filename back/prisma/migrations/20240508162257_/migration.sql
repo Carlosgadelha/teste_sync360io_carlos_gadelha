@@ -2,7 +2,9 @@
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "age" TEXT NOT NULL,
+    "age" INTEGER NOT NULL,
+    "biography" TEXT NOT NULL,
+    "profile_name" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

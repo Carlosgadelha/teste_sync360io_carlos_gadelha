@@ -40,6 +40,31 @@ function insert(Data) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, userRepository.insert(Data)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+function findById(id) {
+    return __awaiter(this, void 0, void 0, function () {
+        var user;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, userRepository.findById(id)];
+                case 1:
+                    user = _a.sent();
+                    if (!user)
+                        throw { type: "not_found" };
+                    return [2 /*return*/, user];
+            }
+        });
+    });
+}
+function update(Data) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, userRepository.update(Data)];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];
@@ -49,4 +74,6 @@ function insert(Data) {
 }
 export default {
     insert: insert,
+    findById: findById,
+    update: update
 };
