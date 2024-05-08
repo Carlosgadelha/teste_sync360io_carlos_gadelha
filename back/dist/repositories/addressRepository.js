@@ -35,59 +35,27 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { prisma } from "../config/database.js";
-function insert(user) {
+function insert(address) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.user.create({
-                        data: user
+                case 0: return [4 /*yield*/, prisma.address.create({
+                        data: address
                     })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
-function findById(id) {
+function update(address) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.user.findUnique({
+                case 0: return [4 /*yield*/, prisma.address.update({
                         where: {
-                            id: id
+                            id: address.id
                         },
-                        select: {
-                            id: true,
-                            name: true,
-                            age: true,
-                            biography: true,
-                            address: {
-                                select: {
-                                    id: true,
-                                    zip_code: true,
-                                    stree_address: true,
-                                    number: true,
-                                    district: true,
-                                    city: true,
-                                    state: true,
-                                    complement: true
-                                }
-                            }
-                        }
-                    })];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
-        });
-    });
-}
-function update(user) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.user.update({
-                        where: {
-                            id: user.id
-                        },
-                        data: user
+                        data: address
                     })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
@@ -97,5 +65,4 @@ function update(user) {
 export default {
     insert: insert,
     update: update,
-    findById: findById
 };

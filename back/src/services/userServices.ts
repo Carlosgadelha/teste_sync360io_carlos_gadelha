@@ -18,7 +18,7 @@ async function findById(id: number) {
 
 async function update(Data: UpdateUserData) {
 
-    await userRepository.update(Data);
+    return await userRepository.update(Data);
 
 }
 

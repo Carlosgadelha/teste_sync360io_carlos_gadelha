@@ -37,7 +37,7 @@ async function findById(id: number) {
 }
 
 async function update(user: UpdateUserData) {
-    await prisma.user.update({
+    return await prisma.user.update({
         where: {
             id: user.id
         },
