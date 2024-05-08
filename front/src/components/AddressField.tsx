@@ -39,7 +39,7 @@ export const AddressField = () => {
   };
 
   useEffect(() => {
-    handleGetZipCode();
+    if(zip_code) handleGetZipCode();
   }, [zip_code]);
 
   useEffect(() => {
