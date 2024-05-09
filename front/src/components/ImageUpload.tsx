@@ -1,13 +1,15 @@
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { Avatar, Box, IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useRef, useState } from 'react';
 
 type AvatarUploadProps = {
   image: File | null;
-  setImage: (file: File | null) => void;
+  setImage: Dispatch<SetStateAction<File | null>>
+  imageUrl: string;
+  setImageUrl: Dispatch<SetStateAction<string>>
 };
 
-export const AvatarUpload = ({ image, setImage }: AvatarUploadProps) => {
+export const AvatarUpload = ({ image, setImage, imageUrl, setImageUrl }: AvatarUploadProps) => {
   const inputFileRef = useRef<HTMLInputElement | null>(null);
   const [url, setUrl] = useState<string>('');
 
@@ -33,7 +35,16 @@ export const AvatarUpload = ({ image, setImage }: AvatarUploadProps) => {
       event.preventDefault();
       handleReset();
     }
+
+    if (imageUrl) {
+      setImageUrl('');
+      setUrl('');
+    }
   };
+
+  useEffect(() => {
+    if (imageUrl) setUrl(`${import.meta.env.VITE_BASE_URL}/profileImage/${imageUrl}`);
+  }, [imageUrl]);
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center">
@@ -45,7 +56,7 @@ export const AvatarUpload = ({ image, setImage }: AvatarUploadProps) => {
           </IconButton>
         </label>
 
-        {image ? (
+        {image || imageUrl ? (
           <IconButton component="span" sx={{ width: '24px', height: '24px', color: 'red' }}>
             <DeleteIcon onClick={handleClear} />
           </IconButton>

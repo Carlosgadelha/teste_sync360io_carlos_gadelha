@@ -12,7 +12,7 @@ async function findById(id: number) {
 
     const user = await userRepository.findById(id);
     if(!user) throw { type: "not_found"};
-    return user;
+    return { ...user, address: user.address[0] || null};
 
 }
 

@@ -1,13 +1,11 @@
 import { Button, Grid, TextField, Typography } from '@mui/material';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { AddressField } from './AddressField';
-import { createUser } from '../services/user';
-import { useState } from 'react';
 import { AvatarUpload } from './ImageUpload';
-import { uploadImage } from '../services/profileImage';
-import { createAddress } from '../services/address';
+import { UserInfo } from '../types/user';
 
-type UserFormValues = {
+export type UserFormValues = {
   name: string;
   address: {
     city: string;
@@ -33,25 +31,40 @@ export const defaultFormValues = {
     street_address: '',
     zip_code: '',
   },
-  age: null,
+  age: '',
   biography: '',
 };
 
-export const UserForm = () => {
-  const [image, setImage] = useState<File | null>(null);
-  const { control, handleSubmit } = useFormContext<UserFormValues>();
-  
-  const handleSubmitForm = async (formValues: UserFormValues) => {
-    const { name, age, biography, address } = formValues;
+type UserFormProps = {
+  userInfo: UserInfo | null;
+  handleSubmitForm: (formValues: UserFormValues) => void;
+  image: File | null;
+  setImage: Dispatch<SetStateAction<File | null>>
+}
 
-    const profile_name = image ? await uploadImage(image) : '';
-    const user = await createUser({ name, age: parseInt(age), biography, profile_name });
+export const UserForm = ({ userInfo, handleSubmitForm, image, setImage } : UserFormProps) => {
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const { control, handleSubmit, setValue } = useFormContext<UserFormValues>();
 
-    if (address) {
-      await createAddress({ ...address, userId: user.id });
+  useEffect(() => {
+    if(userInfo){
+      setValue("name", userInfo.name);
+      setValue("age", userInfo.age);
+      setValue("biography", userInfo.biography);
+      setImageUrl(userInfo.profile_name);
+
+      if(userInfo.address){
+        setValue('address.city', userInfo.address.city);
+        setValue('address.district', userInfo.address.district);
+        setValue('address.state', userInfo.address.state);
+        setValue('address.street_address', userInfo.address.street_address);
+        setValue('address.zip_code', userInfo.address.zip_code);
+        setValue('address.number', userInfo.address.number);
+        setValue('address.complement', userInfo.address.complement);
+        
+      }
     }
-
-  };
+  }, [userInfo])
 
   return (
     <form onSubmit={handleSubmit(handleSubmitForm)}>
@@ -83,19 +96,18 @@ export const UserForm = () => {
                 label={'Idade'}
                 placeholder={'idade'}
                 error={!!error?.message}
-                type="number"
                 fullWidth
               />
             )}
           />
         </Grid>
 
-        <Grid item xs={6}>
+         <Grid item xs={12} md={6}>
           <Typography> Imagem Perfil</Typography>
-          <AvatarUpload image={image} setImage={setImage} />
+          <AvatarUpload image={image} setImage={setImage} imageUrl={imageUrl} setImageUrl={setImageUrl} />
         </Grid>
 
-        <Grid item xs={6}>
+         <Grid item xs={12} md={6}>
           <Controller
             name="biography"
             control={control}
@@ -117,8 +129,13 @@ export const UserForm = () => {
         <Grid item xs={12}>
           <AddressField />
         </Grid>
+
+        <Grid item xs={12} marginBottom={2} display="flex" justifyContent="flex-end">
+          <Button type="submit" variant="contained">
+            {userInfo ? 'Atualizar' : 'Salvar' }
+          </Button>
+        </Grid>
       </Grid>
-      <Button type="submit"> Salvar</Button>
     </form>
   );
 };
