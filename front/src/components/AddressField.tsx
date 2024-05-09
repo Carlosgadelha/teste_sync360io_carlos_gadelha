@@ -109,6 +109,7 @@ export const AddressField = () => {
             render={({ field, fieldState: { error } }) => (
               <TextField
                 {...field}
+                type='number'
                 name="street_address"
                 label={'Numero'}
                 placeholder={'numero'}
