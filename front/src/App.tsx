@@ -19,18 +19,16 @@ function App() {
 
   return (
     <Box height="100vh" display="flex" flexDirection="column" padding={3} alignItems="center">
-      <ProfileImage>C</ProfileImage>
+      <ProfileImage src="http://localhost:5000/profileImage/1715211414778.jpg"/>
       <BoxInfo>
         <Item title="Nome" text={user.name} />
         <Item title="Endereco" text={user.address} />
         <Item title="Idade" text={user.age} />
         <Item title="Biografia" text={user.biography} />
       </BoxInfo>
-      <Divider sx={{ color: 'red', width: '100%', marginBottom: '40px' }}>
+      <Divider sx={{ width: '100%', marginBottom: '40px' }}>
         <Chip label="Atualizar dados" size="medium" variant="outlined" />
       </Divider>
-
-      {/* <Button variant="outlined"> Atualizar dados</Button> */}
 
       <FormProvider {...userForm}>
         <UserForm />

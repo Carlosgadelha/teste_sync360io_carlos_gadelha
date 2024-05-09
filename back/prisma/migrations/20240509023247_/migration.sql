@@ -19,7 +19,7 @@ CREATE TABLE "Address" (
     "district" TEXT NOT NULL,
     "number" TEXT NOT NULL,
     "state" TEXT NOT NULL,
-    "stree_address" TEXT NOT NULL,
+    "street_address" TEXT NOT NULL,
     "zip_code" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

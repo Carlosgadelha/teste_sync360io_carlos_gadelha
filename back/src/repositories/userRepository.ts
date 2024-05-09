@@ -18,12 +18,13 @@ async function findById(id: number) {
             id: true,
             name: true,
             age: true,
+            profile_name: true,
             biography: true,  
             address:{
                 select: { 
                     id: true ,
                     zip_code: true,
-                    stree_address: true,
+                    street_address: true,
                     number: true,
                     district: true,
                     city: true,

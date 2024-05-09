@@ -1,6 +1,11 @@
-import { Grid, TextField } from '@mui/material';
+import { Button, Grid, TextField, Typography } from '@mui/material';
 import { Controller, useFormContext } from 'react-hook-form';
 import { AddressField } from './AddressField';
+import { createUser } from '../services/user';
+import { useState } from 'react';
+import { AvatarUpload } from './ImageUpload';
+import { uploadImage } from '../services/profileImage';
+import { createAddress } from '../services/address';
 
 type UserFormValues = {
   name: string;
@@ -13,7 +18,7 @@ type UserFormValues = {
     street_address: string;
     zip_code: string;
   };
-  age: number;
+  age: string;
   biography: string;
 };
 
@@ -33,9 +38,23 @@ export const defaultFormValues = {
 };
 
 export const UserForm = () => {
-  const { control } = useFormContext<UserFormValues>();
+  const [image, setImage] = useState<File | null>(null);
+  const { control, handleSubmit } = useFormContext<UserFormValues>();
+  
+  const handleSubmitForm = async (formValues: UserFormValues) => {
+    const { name, age, biography, address } = formValues;
+
+    const profile_name = image ? await uploadImage(image) : '';
+    const user = await createUser({ name, age: parseInt(age), biography, profile_name });
+
+    if (address) {
+      await createAddress({ ...address, userId: user.id });
+    }
+
+  };
+
   return (
-    <form onSubmit={() => alert('')}>
+    <form onSubmit={handleSubmit(handleSubmitForm)}>
       <Grid container spacing={2} width="100%">
         <Grid item xs={12} md={6}>
           <Controller
@@ -64,13 +83,19 @@ export const UserForm = () => {
                 label={'Idade'}
                 placeholder={'idade'}
                 error={!!error?.message}
+                type="number"
                 fullWidth
               />
             )}
           />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={6}>
+          <Typography> Imagem Perfil</Typography>
+          <AvatarUpload image={image} setImage={setImage} />
+        </Grid>
+
+        <Grid item xs={6}>
           <Controller
             name="biography"
             control={control}
@@ -82,6 +107,7 @@ export const UserForm = () => {
                 placeholder={'biografia'}
                 error={!!error?.message}
                 multiline
+                minRows={4}
                 fullWidth
               />
             )}
@@ -92,6 +118,7 @@ export const UserForm = () => {
           <AddressField />
         </Grid>
       </Grid>
+      <Button type="submit"> Salvar</Button>
     </form>
   );
 };

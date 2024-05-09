@@ -27,7 +27,7 @@ model Address {
   district      String
   number        String
   state         String
-  stree_address String
+  street_address String
   zip_code      String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
