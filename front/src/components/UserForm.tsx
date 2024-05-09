@@ -39,21 +39,22 @@ type UserFormProps = {
   userInfo: UserInfo | null;
   handleSubmitForm: (formValues: UserFormValues) => void;
   image: File | null;
-  setImage: Dispatch<SetStateAction<File | null>>
-}
+  setImage: Dispatch<SetStateAction<File | null>>;
+  imageUrl: string;
+  setImageUrl: Dispatch<SetStateAction<string>>;
+};
 
-export const UserForm = ({ userInfo, handleSubmitForm, image, setImage } : UserFormProps) => {
-  const [imageUrl, setImageUrl] = useState<string>("");
+export const UserForm = ({ userInfo, handleSubmitForm, image, setImage, imageUrl, setImageUrl }: UserFormProps) => {
   const { control, handleSubmit, setValue } = useFormContext<UserFormValues>();
 
   useEffect(() => {
-    if(userInfo){
-      setValue("name", userInfo.name);
-      setValue("age", userInfo.age);
-      setValue("biography", userInfo.biography);
+    if (userInfo) {
+      setValue('name', userInfo.name);
+      setValue('age', userInfo.age);
+      setValue('biography', userInfo.biography);
       setImageUrl(userInfo.profile_name);
 
-      if(userInfo.address){
+      if (userInfo.address) {
         setValue('address.city', userInfo.address.city);
         setValue('address.district', userInfo.address.district);
         setValue('address.state', userInfo.address.state);
@@ -61,10 +62,9 @@ export const UserForm = ({ userInfo, handleSubmitForm, image, setImage } : UserF
         setValue('address.zip_code', userInfo.address.zip_code);
         setValue('address.number', userInfo.address.number);
         setValue('address.complement', userInfo.address.complement);
-        
       }
     }
-  }, [userInfo])
+  }, [userInfo]);
 
   return (
     <form onSubmit={handleSubmit(handleSubmitForm)}>
@@ -102,12 +102,12 @@ export const UserForm = ({ userInfo, handleSubmitForm, image, setImage } : UserF
           />
         </Grid>
 
-         <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6}>
           <Typography> Imagem Perfil</Typography>
           <AvatarUpload image={image} setImage={setImage} imageUrl={imageUrl} setImageUrl={setImageUrl} />
         </Grid>
 
-         <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6}>
           <Controller
             name="biography"
             control={control}
@@ -132,7 +132,7 @@ export const UserForm = ({ userInfo, handleSubmitForm, image, setImage } : UserF
 
         <Grid item xs={12} marginBottom={2} display="flex" justifyContent="flex-end">
           <Button type="submit" variant="contained">
-            {userInfo ? 'Atualizar' : 'Salvar' }
+            {userInfo ? 'Atualizar' : 'Salvar'}
           </Button>
         </Grid>
       </Grid>

@@ -6,7 +6,7 @@ export type Address = {
     state: string;
     street_address: string;
     zip_code: string;
-    userId: number;
+    userId?: number;
 }
 
 export type AddressUpdate = {

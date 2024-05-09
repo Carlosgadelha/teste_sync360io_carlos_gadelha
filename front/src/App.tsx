@@ -10,9 +10,11 @@ import { createUser, getUser, updateUserInfo } from './services/user';
 import { UserInfo } from './types/user';
 import { createAddress, updateAddress } from './services/address';
 import { uploadImage } from './services/profileImage';
+import { formatAddress } from './utils/formatAddress';
 
 function App() {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [imageUrl, setImageUrl] = useState<string>("");
   const [image, setImage] = useState<File | null>(null);
   const userForm = useForm({
     defaultValues: defaultFormValues,
@@ -23,7 +25,9 @@ function App() {
 
     const profile_name = image ? await uploadImage(image) : '';
     const user = await createUser({ name, age: parseInt(age), biography, profile_name });
-
+    if (user) {
+      localStorage.setItem('userId', user.id);
+    }
     if (address) {
       await createAddress({ ...address, userId: user.id });
     }
@@ -35,24 +39,27 @@ function App() {
     const addressId = userInfo?.address.id;
 
     if (id) {
-      const profile_name = image ? await uploadImage(image) : userInfo?.profile_name;
-      await updateUserInfo({ id, name, age: parseInt(age), biography, profile_name });
+      const profile_name = (image && await uploadImage(image)) || (imageUrl && userInfo.profile_name) || "";
+      await updateUserInfo({ id, name, age: parseInt(age), biography, profile_name});
 
       if (address && addressId) {
         await updateAddress({ ...address, id: addressId, userId: parseInt(id) });
       }
 
-      handleGetUserInfo();
+      handleGetUserInfo(parseInt(id));
     }
   };
 
-  const handleGetUserInfo = async () => {
-    const user = await getUser(1);
-    if (user) setUserInfo(user);
+  const handleGetUserInfo = async (userId: number) => {
+    if (userId) {
+      const user = await getUser(userId);
+      if (user) setUserInfo(user);
+    }
   };
 
   useEffect(() => {
-    handleGetUserInfo();
+    const userId = localStorage.getItem('userId');
+    if (userId) handleGetUserInfo(parseInt(userId));
   }, []);
 
   return (
@@ -60,12 +67,12 @@ function App() {
       <ProfileImage src={`${import.meta.env.VITE_BASE_URL}/profileImage/${userInfo?.profile_name}`} />
       <BoxInfo>
         <Item title="Nome" text={userInfo?.name || ''} />
-        <Item title="Endereco" text={''} />
+        <Item title="Endereco" text={formatAddress(userInfo?.address || null)} />
         <Item title="Idade" text={userInfo?.age || ''} />
         <Item title="Biografia" text={userInfo?.biography || ''} />
       </BoxInfo>
       <Divider sx={{ width: '100%', marginBottom: '40px' }}>
-        <Chip label="Atualizar dados" size="medium" variant="outlined" />
+        <Chip label={userInfo ? "Atualizar Dados" : "Inserir Dados"} size="medium" variant="outlined" />
       </Divider>
 
       <FormProvider {...userForm}>
@@ -74,6 +81,8 @@ function App() {
           handleSubmitForm={userInfo ? handleEditSubmitForm : handleSubmitForm}
           image={image}
           setImage={setImage}
+          imageUrl={imageUrl}
+          setImageUrl={setImageUrl}
         />
       </FormProvider>
     </Box>
