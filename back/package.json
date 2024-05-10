@@ -10,8 +10,15 @@
   },
   "scripts": {
     "build": "npx tsc",
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "start": "node dist/server.js"
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy",
+    "dev": "nodemon --exec node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts",
+    "dev:docker": "npm run docker:compose -- up",
+    "docker:compose": "docker-compose build && docker-compose",
+    "prepare": "npx prisma generate",
+    "start": " node dist/server.js",
+    "startDocker": "npm run prisma:deploy && node dist/server.js"
+
   },
   "dependencies": {
     "@prisma/client": "^5.13.0",
@@ -26,7 +33,6 @@
     "nodemon": "^3.1.0",
     "prisma": "^5.13.0",
     "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.5"
   }
 }
