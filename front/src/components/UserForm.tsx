@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { AddressField } from './AddressField';
 import { AvatarUpload } from './ImageUpload';
 import { UserInfo } from '../types/user';
-import { isValidAge, isValidString } from '../utils/form';
+import { isValidString } from '../utils/form';
 
 export type UserFormValues = {
   name: string;
